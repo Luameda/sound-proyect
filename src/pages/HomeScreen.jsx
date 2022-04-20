@@ -94,8 +94,11 @@ export default function App() {
 
     return (
         <View style={styles.container}>
+            <View>
+                <Text>{song[currentIndex]?.title}</Text>
+                <Text>{song[currentIndex]?.artist}</Text>
+            </View>
             <View style={styles.controls}>
-
                 <TouchableOpacity style={styles.control} onPress={handlePreviousTrack}>
                     <FontAwesome5 name='backward' size={40} color='black' />
                 </TouchableOpacity>
@@ -133,7 +136,6 @@ export default function App() {
             </View>
 
             <Text>{status?.positionMillis} / {status?.durationMillis}</Text>
-            <Text>{status?.didJustFinish && 'Terminado'}</Text>
         </View>
     );
 }
