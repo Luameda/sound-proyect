@@ -1,32 +1,18 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useEffect } from 'react'
-import { music } from '../../dumData';
-import { FontAwesome } from '@expo/vector-icons';
-
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
 
 export default function SearchScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-            {
-                music.map((track, key = 0) => {
-                    return (
-                        <View key={key++} style={styles.item} >
-                            <TouchableOpacity onPress={() => alert('')}>
-                                <FontAwesome name="play" size={40} color='black' />
-                            </TouchableOpacity>
-                            <Text>{track.title}</Text>
-                            <Text>{track.artits}</Text>
-                        </View>
-                    )
-                })
-            }
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <Text>SEARCH SCREEN</Text>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-    item: {
-        borderBottomWidth: 1,
-        marginBottom: 7
-    }
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 })
