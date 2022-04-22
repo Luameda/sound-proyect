@@ -197,10 +197,24 @@ export default function PlayerModal() {
                 source={{ uri: track.cover }}
                 style={styles.cover}
             />
-            <Text style={styles.time}>{msToMin(status?.positionMillis)} / {msToMin(status?.durationMillis)}</Text>
-            <Text style={styles.title}>{track?.title}</Text>
-            <Text style={styles.text}>{track?.artist}</Text>
-            <Text style={styles.text}>{track?.album}</Text>
+            <Text
+                style={styles.time}
+            >
+                {msToMin(status?.positionMillis)} / {msToMin(status?.durationMillis)}
+            </Text>
+            <Text
+                style={styles.title}
+                children={track?.title}
+            />
+            <Text
+                style={styles.text}
+                children={track?.artist}
+            />
+            <Text
+                style={styles.text}
+                children={track?.album}
+            />
+            
             <View style={styles.controls}>
                 <TouchableOpacity style={styles.control}>
                     <FontAwesome5 name='backward' size={40} color='black' />

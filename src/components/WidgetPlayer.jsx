@@ -9,12 +9,13 @@ import { FontAwesome5 } from '@expo/vector-icons'
 import { Portal } from 'react-native-portalize'
 import { Modalize } from 'react-native-modalize'
 import PlayerModal from './PlayerModal'
-import { useEffect, useRef, useContext } from 'react'
+import { useRef, useContext, useState, useEffect } from 'react'
 import { PlayerContext } from '../context/PlayerContext'
 
 export default function WidgetPlayer() {
-    const { isPlaying, onPLayPause, track } = useContext(PlayerContext)
+    const { isPlaying, onPLayPause, track, status } = useContext(PlayerContext)
     const modalizeRef = useRef(null);
+    const [progress, setProgress] = useState(50)
 
     const onOpen = () => {
         modalizeRef.current?.open();
@@ -22,41 +23,72 @@ export default function WidgetPlayer() {
     const onClose = () => {
         modalizeRef.current?.close();
     };
-    
+    const progressBar = () => {
+        let _100 = status?.durationMillis / 100;
+        let progress = status?.positionMillis
+
+        setProgress(progress / _100)
+    }
+
+    useEffect(() => {
+        progressBar()
+
+        return () => {
+            console.log('')
+        }
+    }, [status])
+
 
     return (
         <>
             <View style={styles.container}>
-                <ImageBackground
-                    source={{ uri: track?.cover }}
-                    style={styles.cover}
+                <View style={styles.progressBar}
                     children={
-                        <TouchableOpacity
-                            onPress={onPLayPause}
-                            children={
-                                <FontAwesome5
-                                    name={isPlaying ? 'pause' : 'play'}
-                                    size={34}
-                                    color='#fff'
-                                />
-                            }
-                        />
+                        <View style={[styles.progress, { width: `${progress}%` }]} />
                     }
                 />
-                <TouchableOpacity onPress={onOpen} style={{ width: '100%' }} >
-                    <View style={{ paddingLeft: 5 }}>
-                        <Text style={styles.title}>{track?.title}</Text>
-                        <Text style={styles.artist}>{track?.artist}</Text>
-                        <Text style={styles.artist}>{track?.album}</Text>
-                    </View>
-                </TouchableOpacity>
+
+                <View style={styles.trackInfo}>
+                    <TouchableOpacity
+                        onPress={onPLayPause}
+                        children={
+                            <ImageBackground
+                                source={{ uri: track?.cover }}
+                                style={styles.cover}
+                                children={
+                                    <FontAwesome5
+                                        name={isPlaying ? 'pause' : 'play'}
+                                        size={34}
+                                        color='#fff'
+                                    />
+                                }
+                            />
+                        }
+                    />
+                    <TouchableOpacity onPress={onOpen} style={{ width: '100%' }} >
+                        <View style={{ paddingLeft: 5 }}>
+                            <Text
+                                style={styles.title}
+                                children={track?.title}
+                            />
+                            <Text
+                                style={styles.artist}
+                                children={track?.artist}
+                            />
+                            <Text
+                                style={styles.artist}
+                                children={track?.album}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <Portal
                 children={
                     <Modalize
                         ref={modalizeRef}
-                        modalTopOffset={50}
+                        modalTopOffset={250}
                         children={
                             <PlayerModal onClose={onClose} />
                         }
@@ -70,11 +102,12 @@ export default function WidgetPlayer() {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#333',
-        flexDirection: 'row',
         position: 'absolute',
         bottom: 0,
-        width: '100%',
-        alignItems: 'center'
+        width: '100%'
+    },
+    trackInfo: {
+        flexDirection: 'row'
     },
     cover: {
         width: 70,
@@ -90,5 +123,15 @@ const styles = StyleSheet.create({
     artist: {
         color: "#fff",
         fontWeight: '200'
+    },
+    progressBar: {
+        height: 5,
+        width: '100%',
+        backgroundColor: 'green',
+        justifyContent: 'center'
+    },
+    progress: {
+        backgroundColor: '#f3f',
+        height: 4
     }
 })

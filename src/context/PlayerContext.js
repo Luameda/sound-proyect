@@ -10,7 +10,7 @@ export const PlayerProvider = ({ children }) => {
     const [widgetView, setWidgetView] = useState(false)
     const [isPlaying, setIsPlaying] = useState(true)
     const [track, setTrack] = useState(null)
-    const [sound, setSound] = useState(null)
+    const [sound, setSound] = useState()
     const [status, setStatus] = useState({})
 
     const onPlaybackStatusUpdate = status => setStatus(status)
