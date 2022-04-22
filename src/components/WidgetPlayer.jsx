@@ -1,11 +1,19 @@
-import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+    ImageBackground,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { Portal } from 'react-native-portalize'
 import { Modalize } from 'react-native-modalize'
 import PlayerModal from './PlayerModal'
-import { useRef } from 'react'
+import { useEffect, useRef, useContext } from 'react'
+import { PlayerContext } from '../context/PlayerContext'
 
 export default function WidgetPlayer() {
+    const { isPlaying, onPLayPause, track } = useContext(PlayerContext)
     const modalizeRef = useRef(null);
 
     const onOpen = () => {
@@ -14,19 +22,20 @@ export default function WidgetPlayer() {
     const onClose = () => {
         modalizeRef.current?.close();
     };
+    
 
     return (
         <>
             <View style={styles.container}>
                 <ImageBackground
-                    source={{ uri: 'https://imagenes.elpais.com/resizer/FuuHVKhPDiTnD6P7oCNLulTTbdg=/1960x1470/arc-anglerfish-eu-central-1-prod-prisa.s3.amazonaws.com/public/GUVJC4QSET5PPIO25ENUNLORK4.jpg' }}
+                    source={{ uri: track?.cover }}
                     style={styles.cover}
                     children={
                         <TouchableOpacity
-                            onPress={() => alert('')}
+                            onPress={onPLayPause}
                             children={
                                 <FontAwesome5
-                                    name='play'
+                                    name={isPlaying ? 'pause' : 'play'}
                                     size={34}
                                     color='#fff'
                                 />
@@ -36,9 +45,9 @@ export default function WidgetPlayer() {
                 />
                 <TouchableOpacity onPress={onOpen} style={{ width: '100%' }} >
                     <View style={{ paddingLeft: 5 }}>
-                        <Text style={styles.title}>Title Song</Text>
-                        <Text style={styles.artist}>Artist</Text>
-                        <Text style={styles.artist}>Album</Text>
+                        <Text style={styles.title}>{track?.title}</Text>
+                        <Text style={styles.artist}>{track?.artist}</Text>
+                        <Text style={styles.artist}>{track?.album}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -47,6 +56,7 @@ export default function WidgetPlayer() {
                 children={
                     <Modalize
                         ref={modalizeRef}
+                        modalTopOffset={50}
                         children={
                             <PlayerModal onClose={onClose} />
                         }
